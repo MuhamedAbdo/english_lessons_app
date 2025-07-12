@@ -59,4 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'english-lessons-app-961e3',
     storageBucket: 'english-lessons-app-961e3.firebasestorage.app',
   );
+
 }
