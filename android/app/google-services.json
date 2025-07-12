@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "896159618486",
+    "project_id": "english-lessons-app-961e3",
+    "storage_bucket": "english-lessons-app-961e3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:896159618486:android:6139f09e8434eeb126dd17",
+        "android_client_info": {
+          "package_name": "com.mohamed.english_lessons_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9QoVZCgPdJQCUeq3iTD3FwThpGIIt_xo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
