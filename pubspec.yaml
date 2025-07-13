@@ -17,6 +17,7 @@ dependencies:
   firebase_auth: ^4.19.0
   google_fonts: ^6.1.0
   flutter_pdfview: ^1.0.0+1
+  flutter_tts: ^4.2.3
 
 dev_dependencies:
   flutter_test:
