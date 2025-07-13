@@ -6,13 +6,12 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.3 <4.0.0' # ← تم تعديله هنا
+  sdk: '>=3.1.3 <4.0.0'
   flutter: '>=3.22.0'
 
 dependencies:
   flutter:
     sdk: flutter
-
   firebase_core: ^2.25.0
   cloud_firestore: ^4.16.0
   firebase_auth: ^4.19.0
@@ -26,15 +25,11 @@ dev_dependencies:
   lint: ^2.0.0
 
 flutter:
+  uses-material-design: true
+  assets:
+    - asset/fonts/Cairo-Regular.ttf
+
   fonts:
     - family: Cairo
       fonts:
-        - asset: fonts/Cairo-Regular.ttf
-        - asset: fonts/Cairo-Bold.ttf
-          weight: 700
-        - asset: fonts/Cairo-Italic.ttf
-          style: italic
-    - family: Taha
-      fonts:
-        - asset: fonts/Taha.ttf
-  uses-material-design: true
+        - asset: asset/fonts/Cairo-Regular.ttf
