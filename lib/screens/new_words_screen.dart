@@ -12,43 +12,50 @@ class NewWordsScreen extends StatefulWidget {
 }
 
 class _NewWordsScreenState extends State<NewWordsScreen> {
+  late final List<Map<String, String>> wordsList;
   final FlutterTts flutterTts = FlutterTts();
+
+  @override
+  void initState() {
+    super.initState();
+
+    final data = widget.lesson.data() as Map<String, dynamic>;
+    final words = data['words'] ?? [];
+
+    wordsList = words
+        .map<Map<String, String>>(
+          (w) => {
+            'ar': w['word_ar']?.toString() ?? '',
+            'en': w['word_en']?.toString() ?? '',
+          },
+        )
+        .toList();
+
+    flutterTts.setLanguage("en-US");
+  }
 
   Future<void> speakWord(String word) async {
     if (word.isNotEmpty) {
-      await flutterTts.setLanguage("en-US");
-      await flutterTts.setPitch(1.0);
       await flutterTts.speak(word);
     }
   }
 
   @override
-  void dispose() async {
-    await flutterTts.stop();
+  void dispose() {
+    flutterTts.stop();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final data = widget.lesson.data() as Map<String, dynamic>;
-    final words = data['words'] ?? []; // ← هنا نتعامل مع البيانات داخل build()
-
-    final wordsList = words
-        .map<Map<String, String>>(
-          (w) => {
-            'ar': w['ar']?.toString() ?? '',
-            'en': w['en']?.toString() ?? '',
-          },
-        )
-        .toList();
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-            textDirection: TextDirection.rtl,
-            textAlign: TextAlign.center,
-            "${data['title_ar']} | الكلمات الجديدة"),
+          "${widget.lesson['title_ar']} | الكلمات الجديدة",
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.rtl,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -57,26 +64,54 @@ class _NewWordsScreenState extends State<NewWordsScreen> {
             : ListView.builder(
                 itemCount: wordsList.length,
                 itemBuilder: (context, index) {
-                  final en = wordsList[index]['en']!;
                   final ar = wordsList[index]['ar']!;
+                  final en = wordsList[index]['en']!;
 
-                  return ListTile(
-                    title: Text(ar, style: const TextStyle(fontSize: 25)),
-                    trailing: GestureDetector(
-                      onTap: () => speakWord(en),
+                  return Card(
+                    elevation: 3,
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            en,
-                            style: const TextStyle(
-                              fontSize: 25,
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
+                          // النص الإنجليزي ← يسار الشاشة
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              en,
+                              style: const TextStyle(
+                                fontSize: 25,
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                              ),
+                              textAlign: TextAlign.left,
+                              textDirection: TextDirection.ltr,
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          const Icon(Icons.volume_up, color: Colors.green),
+
+                          const SizedBox(width: 16),
+
+                          // زر النطق ← وسط
+                          IconButton(
+                            icon: const Icon(Icons.volume_up,
+                                color: Colors.green),
+                            onPressed: () => speakWord(en),
+                          ),
+
+                          // النص العربي ← يمين الشاشة
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              ar,
+                              style: const TextStyle(fontSize: 25),
+                              textAlign: TextAlign.right,
+                              textDirection: TextDirection.rtl,
+                            ),
+                          ),
                         ],
                       ),
                     ),
