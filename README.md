@@ -1,16 +1,61 @@
-# english_lessons_app
+# English Lessons App 📘
 
-A new Flutter project.
+تطبيق تعليمي بسيط لتعليم اللغة الإنجليزية للطلاب الناطقين بالعربية.  
+التطبيق مكتوب بلغة Dart ويستخدم Flutter + Firebase لعرض الدروس والكلمات الجديدة مع خاصية **النطق الصوتي (Text-to-Speech)**.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🎯 الوصف
 
-A few resources to get you started if this is your first Flutter project:
+**English Lessons App** هو تطبيق يساعد في تعلم أساسيات اللغة الإنجليزية بأسلوب بسيط وواضح، مناسب للمبتدئين والطلاب في المرحلة الإعدادية والثانوية.  
+التطبيق يدعم عرض:
+- دروس مُنظمة
+- كلمات جديدة يوميًا
+- نطق الكلمات الإنجليزية بصوت واضح
+- شاشة ترحيب (Splash Screen)
+- رفع البيانات من **Firebase**
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🔧 التقنيات المستخدمة
+
+| التقنية | الاستخدام |
+|---------|-----------|
+| **Flutter** | بناء الواجهة وكل شيء في الكود |
+| **Dart** | البرمجة المنطقية والتفاعل مع الحزمة |
+| **Firebase Firestore** | تخزين الدروس والكلمات الجديدة |
+| **flutter_tts** | نطق الكلمات الإنجليزية |
+| **Google Fonts (Taha, Cairo - مستقبلاً)** | دعم الخطوط العربية الجميلة |
+| **Android/iOS** | دعم متعدد المنصات |
+
+---
+
+## 🧩 هيكل البيانات في Firebase
+
+### Collection: `lessons`
+
+```json
+{
+  "title_ar": "الجملة البسيطة",
+  "title_en": "Simple Sentence",
+  "content_blocks": [
+    {
+      "type": "text",
+      "value": "الجملة البسيطة تتكون من فاعل + فعل (+ مفعول به)"
+    },
+    {
+      "type": "example_sentence",
+      "en": "He plays football.",
+      "ar": "هو يلعب كرة القدم."
+    }
+  ],
+  "words": [
+    {
+      "word_ar": "فاعل",
+      "word_en": "Subject",
+      "pronunciation": "/sʌbdʒɛkt/",
+      "example_en": "He is the subject.",
+      "example_ar": "هو الفاعل."
+    }
+  ]
+}
