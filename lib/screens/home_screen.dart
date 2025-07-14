@@ -24,7 +24,16 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: const Text('الدروس'),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                minimumSize: const Size(200, 50), // ← جعل الزر يمتد كامل العرض
+                backgroundColor: Colors.deepPurple,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('الدروس',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             ),
           ],
         ),

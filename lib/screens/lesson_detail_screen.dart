@@ -23,65 +23,80 @@ class LessonDetailScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const Text(
-                'الشرح:',
-                textDirection: TextDirection.rtl,
-                textAlign: TextAlign.right,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              if (contentBlocks != null && contentBlocks.isNotEmpty)
-                ...contentBlocks.map((block) {
-                  final item = block as Map<String, dynamic>;
-                  final String type = item['type'] ?? '';
-                  final String value = item['value'] ?? '';
-                  final String enExample = item['en'] ?? '';
-                  final String arExample = item['ar'] ?? '';
-                  final String imageUrl = item['image_url'] ?? '';
+        child: Column(
+          children: [
+            const Text(
+              'الشرح:',
+              textDirection: TextDirection.rtl,
+              textAlign: TextAlign.right,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (contentBlocks != null && contentBlocks.isNotEmpty)
+                      ...contentBlocks.map((block) {
+                        final item = block as Map<String, dynamic>;
+                        final String type = item['type'] ?? '';
+                        final String value = item['value'] ?? '';
+                        final String enExample = item['en'] ?? '';
+                        final String arExample = item['ar'] ?? '';
+                        final String imageUrl = item['image_url'] ?? '';
 
-                  switch (type) {
-                    case 'text':
-                      return _buildArabicText(value, imageUrl);
+                        switch (type) {
+                          case 'text':
+                            return _buildArabicText(value, imageUrl);
 
-                    case 'english_word':
-                      return _buildEnglishWord(value, imageUrl);
+                          case 'english_word':
+                            return _buildEnglishWord(value, imageUrl);
 
-                    case 'example_sentence':
-                      return _buildExampleSentence(
-                          en: enExample, ar: arExample, imageUrl: imageUrl);
+                          case 'example_sentence':
+                            return _buildExampleSentence(
+                                en: enExample,
+                                ar: arExample,
+                                imageUrl: imageUrl);
 
-                    default:
-                      return Container();
-                  }
-                }).toList()
-              else
-                const Text(
-                  'لا يوجد محتوى للدرس.',
-                  style: TextStyle(fontSize: 16, color: Colors.red),
+                          default:
+                            return Container();
+                        }
+                      })
+                    else
+                      const Text(
+                        'لا يوجد محتوى للدرس.',
+                        style: TextStyle(fontSize: 16, color: Colors.red),
+                      ),
+                  ],
                 ),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NewWordsScreen(lesson: lesson),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.translate),
-                label: const Text('الكلمات الجديدة'),
-                style: ElevatedButton.styleFrom(
+              ),
+            ),
+            const SizedBox(height: 10),
+            // الزر دائمًا ظاهر في أسفل الشاشة
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NewWordsScreen(lesson: lesson),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.translate),
+              label: const Text('الكلمات الجديدة'),
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  maximumSize:
+                      const Size(250, 50), // ← جعل الزر يمتد كامل العرض
                   backgroundColor: Colors.deepPurple,
                   foregroundColor: Colors.white,
-                ),
-              ),
-            ],
-          ),
+                  minimumSize: const Size(180, 40) // ← جعل الزر يمتد كامل العرض
+                  ),
+            ),
+          ],
         ),
       ),
     );
@@ -102,7 +117,7 @@ class LessonDetailScreen extends StatelessWidget {
               fit: BoxFit.cover,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               },
               errorBuilder: (context, error, stackTrace) {
                 return const Text("فشل تحميل الصورة.");
@@ -135,7 +150,7 @@ class LessonDetailScreen extends StatelessWidget {
               fit: BoxFit.fitWidth,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               },
               errorBuilder: (context, error, stackTrace) {
                 return const Text("فشل تحميل الصورة");
@@ -161,7 +176,6 @@ class LessonDetailScreen extends StatelessWidget {
   Widget _buildExampleSentence(
       {required String en, required String ar, required String imageUrl}) {
     return Column(
-      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (imageUrl.isNotEmpty)
           Padding(

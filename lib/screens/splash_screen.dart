@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart'; // ← لاستخدام Future.delayed
 import 'package:english_lessons_app/screens/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,12 +13,13 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    // الانتظار لمدة ثانيتين ثم الانتقال إلى HomeScreen
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      }
     });
   }
 
@@ -31,25 +31,23 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // الصورة
+            // 📌 تأكد من أن الصورة موجودة في assets/images/
             Image.asset(
-              'asset/images/logo.png', // ← يجب أن تكون موجودة في assets/images/
+              'asset/images/logo.png',
               width: 200,
               height: 200,
               fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return const Icon(Icons.error_outline,
+                    size: 100, color: Colors.red);
+              },
             ),
-
             const SizedBox(height: 20),
-
-            // نص الترحيب
             const Text(
               'Loading...',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-
             const SizedBox(height: 10),
-
-            // مؤشر التحميل
             const CircularProgressIndicator(),
           ],
         ),
