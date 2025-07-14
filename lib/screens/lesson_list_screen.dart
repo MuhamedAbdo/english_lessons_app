@@ -29,7 +29,8 @@ class LessonListScreen extends StatelessWidget {
             return const Center(child: Text('لا توجد دروس بعد'));
           }
 
-          final lessonDocs = snapshot.data!.docs;
+          final lessonDocs =
+              snapshot.data!.docs.reversed.toList(); // ← تم تعديل الترتيب هنا
 
           return ListView.builder(
             itemCount: lessonDocs.length,
