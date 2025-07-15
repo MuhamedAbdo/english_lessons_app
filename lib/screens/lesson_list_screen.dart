@@ -11,10 +11,26 @@ class LessonListScreen extends StatelessWidget {
         FirebaseFirestore.instance.collection('lessons');
 
     return Scaffold(
-      appBar: AppBar(title: const Text('الدروس'), centerTitle: true),
+      appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.deepPurple,
+        title: const Text(
+          'الدروس',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: lessons.snapshots(),
+        stream: lessons.orderBy("order").snapshots(), // ← هنا يتم الفرز
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           if (snapshot.hasError) {
             return Center(
               child: Text(
@@ -29,26 +45,31 @@ class LessonListScreen extends StatelessWidget {
             return const Center(child: Text('لا توجد دروس بعد'));
           }
 
-          final lessonDocs =
-              snapshot.data!.docs.reversed.toList(); // ← تم تعديل الترتيب هنا
+          final lessonDocs = snapshot.data!.docs;
 
           return ListView.builder(
             itemCount: lessonDocs.length,
             itemBuilder: (context, index) {
               DocumentSnapshot lesson = lessonDocs[index];
+              final data = lesson.data() as Map<String, dynamic>;
 
               return Directionality(
                 textDirection: TextDirection.rtl,
                 child: ListTile(
                   title: Text(
-                    lesson['title_ar'] ?? 'عنوان غير موجود',
+                    data['title_ar'] ?? 'عنوان غير موجود',
                     textAlign: TextAlign.right,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    lesson['title_en'] ?? 'Lesson Title',
+                    data['title_en'] ?? 'Lesson Title',
                     textAlign: TextAlign.right,
                     style: const TextStyle(color: Colors.blueGrey),
+                  ),
+                  trailing: CircleAvatar(
+                    backgroundColor: Colors.deepPurple,
+                    foregroundColor: Colors.white,
+                    child: Text('${data['order']}'),
                   ),
                   onTap: () {
                     Navigator.push(

@@ -14,9 +14,16 @@ class LessonDetailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.deepPurple,
         centerTitle: true,
         title: Text(
           data['title_ar'] ?? 'عنوان غير موجود',
+          style: const TextStyle(
+            color: Colors.white,
+          ),
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.center,
         ),

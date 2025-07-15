@@ -68,9 +68,16 @@ class _NewWordsScreenState extends State<NewWordsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.deepPurple,
         centerTitle: true,
         title: Text(
           "${widget.lesson['title_ar']} | الكلمات الجديدة",
+          style: const TextStyle(
+            color: Colors.white,
+          ),
           textAlign: TextAlign.center,
           textDirection: TextDirection.rtl,
         ),
