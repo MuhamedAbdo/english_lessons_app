@@ -14,16 +14,12 @@ class LessonDetailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.deepPurple,
         centerTitle: true,
         title: Text(
           data['title_ar'] ?? 'عنوان غير موجود',
-          style: const TextStyle(
-            color: Colors.white,
-          ),
+          style: const TextStyle(color: Colors.white),
           textDirection: TextDirection.rtl,
           textAlign: TextAlign.center,
         ),
@@ -69,7 +65,7 @@ class LessonDetailScreen extends StatelessWidget {
                           default:
                             return Container();
                         }
-                      })
+                      }).toList()
                     else
                       const Text(
                         'لا يوجد محتوى للدرس.',
@@ -93,15 +89,14 @@ class LessonDetailScreen extends StatelessWidget {
               icon: const Icon(Icons.translate),
               label: const Text('الكلمات الجديدة'),
               style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  maximumSize:
-                      const Size(250, 50), // ← جعل الزر يمتد كامل العرض
-                  backgroundColor: Colors.deepPurple,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size(180, 40) // ← جعل الزر يمتد كامل العرض
-                  ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                backgroundColor: Colors.deepPurple,
+                foregroundColor: Colors.white,
+                minimumSize: const Size(180, 40),
+                maximumSize: const Size(250, 50),
+              ),
             ),
           ],
         ),
@@ -109,117 +104,122 @@ class LessonDetailScreen extends StatelessWidget {
     );
   }
 
-  // عرض النصوص العربية مع صورة اختيارية
+  // 🔹 بناء الفقرات العربية مع صورة اختيارية
   Widget _buildArabicText(String text, String imageUrl) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        if (imageUrl.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Image.network(
-              imageUrl,
-              width: double.infinity,
-              height: 200,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return const Center(child: CircularProgressIndicator());
-              },
-              errorBuilder: (context, error, stackTrace) {
-                return const Text("فشل تحميل الصورة.");
-              },
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          if (imageUrl.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Image.network(
+                imageUrl,
+                width: double.infinity,
+                height: 200,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(child: CircularProgressIndicator());
+                },
+                errorBuilder: (_, __, ___) => const Text("فشل تحميل الصورة"),
+              ),
             ),
+          Text(
+            text,
+            textAlign: TextAlign.right,
+            textDirection: TextDirection.rtl,
+            style: const TextStyle(fontSize: 16),
           ),
-        Text(
-          text,
-          textDirection: TextDirection.rtl,
-          textAlign: TextAlign.right,
-          style: const TextStyle(fontSize: 16),
-        ),
-        const SizedBox(height: 10),
-      ],
+          const SizedBox(height: 10),
+        ],
+      ),
     );
   }
 
-  // عرض الكلمات الإنجليزية مع صورة اختيارية
+  // 🔹 بناء الكلمات الإنجليزية مع دعم LTR
   Widget _buildEnglishWord(String word, String imageUrl) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (imageUrl.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Image.network(
-              imageUrl,
-              width: double.infinity,
-              height: 150,
-              fit: BoxFit.fitWidth,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return const Center(child: CircularProgressIndicator());
-              },
-              errorBuilder: (context, error, stackTrace) {
-                return const Text("فشل تحميل الصورة");
-              },
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (imageUrl.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Image.network(
+                imageUrl,
+                width: double.infinity,
+                height: 150,
+                fit: BoxFit.fitWidth,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(child: CircularProgressIndicator());
+                },
+                errorBuilder: (_, __, ___) => const Text("فشل تحميل الصورة"),
+              ),
+            ),
+          Text(
+            word,
+            textAlign: TextAlign.left,
+            textDirection: TextDirection.ltr,
+            style: const TextStyle(
+              color: Colors.blue,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
           ),
-        Text(
-          word,
-          style: const TextStyle(
-            color: Colors.blue,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-          textDirection: TextDirection.ltr,
-          textAlign: TextAlign.left,
-        ),
-        const SizedBox(height: 10),
-      ],
+          const SizedBox(height: 10),
+        ],
+      ),
     );
   }
 
-  // عرض الأمثلة الثنائية اللغة مع صورة اختيارية
+  // 🔹 بناء الأمثلة الثنائية اللغة مع دعم المحاذاة الصحيحة
   Widget _buildExampleSentence(
       {required String en, required String ar, required String imageUrl}) {
-    return Column(
-      children: [
-        if (imageUrl.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Image.network(
-              imageUrl,
-              width: double.infinity,
-              height: 180,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return const Center(child: CircularProgressIndicator());
-              },
-              errorBuilder: (context, error, stackTrace) {
-                return const Text("فشل تحميل الصورة",
-                    style: TextStyle(color: Colors.red));
-              },
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Column(
+        children: [
+          if (imageUrl.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Image.network(
+                imageUrl,
+                width: double.infinity,
+                height: 180,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(child: CircularProgressIndicator());
+                },
+                errorBuilder: (_, __, ___) => const Text("فشل تحميل الصورة",
+                    style: TextStyle(color: Colors.red)),
+              ),
+            ),
+          // الجملة الإنجليزية ← LTR
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              en,
+              textAlign: TextAlign.left,
+              textDirection: TextDirection.ltr,
+              style: const TextStyle(fontSize: 16, color: Colors.green),
             ),
           ),
-        Text(
-          en,
-          textDirection: TextDirection.ltr,
-          textAlign: TextAlign.left,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.green,
+          // الجملة العربية ← RTL
+          Text(
+            ar,
+            textAlign: TextAlign.right,
+            textDirection: TextDirection.rtl,
+            style: const TextStyle(fontSize: 16),
           ),
-        ),
-        Text(
-          ar,
-          textDirection: TextDirection.rtl,
-          textAlign: TextAlign.right,
-          style: const TextStyle(fontSize: 16),
-        ),
-        const Divider(color: Colors.grey, height: 20),
-        const SizedBox(height: 10),
-      ],
+          // const Divider(color: Colors.grey, height: 20),
+          const SizedBox(height: 30),
+        ],
+      ),
     );
   }
 }
